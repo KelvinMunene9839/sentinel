@@ -429,7 +429,6 @@ Project structure
 │   ├── web01/                Systemd unit (sentinel-web01.service), env template, and setup script
 │   ├── web02/                Systemd unit (sentinel-web02.service), env template, and setup script
 │   └── scripts/              Rolling deployment and HA verification scripts
-├── docs/                     Architecture, API integrations, database, security, deployment, operations, testing
 └── .env.example              Environment configuration template
 
 
