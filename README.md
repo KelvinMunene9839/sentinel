@@ -1,18 +1,20 @@
-SENTINEL
+# SENTINEL
 
-Cloud & Enterprise Attack Surface Intelligence Platform
+**Cloud & Enterprise Attack Surface Intelligence Platform**
 
-SENTINEL discovers and assesses the external attack surface of domains you are authorized to examine. It uses passive reconnaissance only: it reads public data sources and never probes, scans ports on, or sends traffic to the targets themselves. Findings are produced by a deterministic, explainable risk engine, and every finding carries its evidence, source, confidence, and a recommended remediation.
+SENTINEL discovers and assesses the external attack surface of domains you are authorized to examine. It uses **passive reconnaissance only**: it reads public data sources and never probes, scans ports on, or sends traffic to the targets themselves. Findings are produced by a deterministic, explainable risk engine, and every finding carries its evidence, source, confidence and a recommended remediation.
 
-Live Production Deployment: https://kelvinnyagah.tech
+- **Live Production URL:** [https://kelvinnyagah.tech](https://kelvinnyagah.tech)
+- **Demo Video Walkthrough:** [Watch the SENTINEL Feature & Architecture Walkthrough](https://youtu.be/wfiMCEKjTCg)
+- **Frontend:** vanilla HTML, CSS and ES6 JavaScript (no build step, no framework)
+- **Backend:** Node.js 20+, Express, PostgreSQL (embedded PGlite for local development)
+- **Deployment:** two stateless app nodes (`Web01`, `Web02`) behind an HAProxy TLS load balancer (`Lb01`)
 
-Frontend: Vanilla HTML, CSS, and ES6 JavaScript (no build step, no framework)
+[![SENTINEL Demo Video](https://img.youtube.com/vi/wfiMCEKjTCg/maxresdefault.jpg)](https://youtu.be/wfiMCEKjTCg)
 
-Backend: Node.js 20+, Express, PostgreSQL 12 (pg in production; embedded PGlite for local development)
+---
 
-Infrastructure: Two stateless application nodes (7378-web-01, 7378-web-02) behind an HAProxy 2.0 TLS-terminating load balancer (7378-lb-01)
-
-Contents
+## Contents
 
 What it does
 
