@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign in · SENTINEL</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <div class="auth-page">
+    <aside class="auth-aside">
+      <a href="/" class="brand-lockup">
+        <div class="brand-mark" id="login-brand-icon"></div>
+        <div class="brand-text">
+          <span class="brand-name">SENTINEL</span>
+          <span class="brand-subtitle">Attack surface intelligence</span>
+        </div>
+      </a>
+      <div>
+        <h1>External exposure, assessed passively.</h1>
+        <p>Discovers subdomains, DNS records, open ports and known CVEs for domains you are authorized to assess. No active scanning.</p>
+        <div class="source-list">
+          <div><span>Subdomains</span><span class="mono">crt.sh</span></div>
+          <div><span>DNS</span><span class="mono">Cloudflare DoH</span></div>
+          <div><span>Open ports</span><span class="mono">Shodan InternetDB</span></div>
+          <div><span>CVEs</span><span class="mono">NIST NVD 2.0</span></div>
+        </div>
+      </div>
+      <span style="font-size:var(--text-xs); color:var(--text-muted);">Sessions use HttpOnly, SameSite=Strict cookies and CSRF tokens.</span>
+    </aside>
+
+    <main class="auth-main">
+      <div style="width:100%; max-width:320px;">
+        <form id="login-form" class="auth-form">
+          <h2>Sign in</h2>
+          <div id="login-error" class="notice notice-error" style="display:none;"></div>
+          <div>
+            <label for="username" class="field-label">Username</label>
+            <input type="text" id="username" name="username" class="input-control" required value="admin" autocomplete="username" />
+          </div>
+          <div>
+            <label for="password" class="field-label">Password</label>
+            <input type="password" id="password" name="password" class="input-control" required value="AdminPassword123!" autocomplete="current-password" />
+          </div>
+          <button type="submit" id="login-btn" class="btn btn-primary" style="min-height:32px;">Sign in</button>
+        </form>
+
+        <div class="dev-accounts">
+          Seeded accounts
+          <div class="row">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="fillCreds('admin','AdminPassword123!')">Administrator</button>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="fillCreds('analyst','AnalystPassword123!')">Analyst</button>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="fillCreds('auditor','AuditorPassword123!')">Auditor (read-only)</button>
+          </div>
+          <div style="margin-top:0.75rem;"><a href="/dashboard.html">Continue without signing in</a></div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="/js/icons.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script>
+    if (window.SentinelIcons) {
+      document.getElementById('login-brand-icon').innerHTML = window.SentinelIcons.getIcon('shield');
+    }
+    function fillCreds(u, p) {
+      document.getElementById('username').value = u;
+      document.getElementById('password').value = p;
+    }
+  </script>
+</body>
+</html>

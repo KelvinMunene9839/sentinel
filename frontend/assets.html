@@ -1,0 +1,153 @@
+<<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Assets · SENTINEL</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="app-sidebar"></aside>
+
+    <div class="app-main">
+      <header class="app-topbar"></header>
+
+      <main class="page-container">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title" id="assets-page-title">Assets</h1>
+            <p class="page-subtitle">Subdomains with their DNS, public IP exposure and risk.</p>
+          </div>
+          <div class="page-actions">
+            <a href="/api/v1/reports/export?reportType=assets_csv" class="btn btn-secondary">Export CSV</a>
+            <a href="/api/v1/reports/export?reportType=consolidated_json" class="btn btn-secondary">Export JSON</a>
+            <a href="/scans.html" class="btn btn-primary">New scan</a>
+          </div>
+        </div>
+
+        <div class="panel">
+          <!-- Enterprise Filter & Column Visibility Toolbar -->
+          <div class="toolbar">
+            <div class="toolbar-group" style="flex:1;">
+              <input type="text" id="asset-search" class="input-control" placeholder="Search name, IP, CNAME or provider" style="min-width:250px; flex:1; max-width:360px;" />
+
+              <select id="asset-type-filter" class="select-control">
+                <option value="">All types</option>
+                <option value="Root Domain">Root Domain</option>
+                <option value="Subdomain">Subdomain</option>
+                <option value="CNAME Alias">CNAME Alias</option>
+                <option value="Dormant CT">Dormant CT Entry</option>
+              </select>
+
+              <select id="asset-risk-filter" class="select-control">
+                <option value="">All risk levels</option>
+                <option value="Critical">Critical</option>
+                <option value="High">High</option>
+                <option value="Medium">Medium</option>
+                <option value="Low">Low</option>
+                <option value="Informational">Informational</option>
+              </select>
+
+              <select id="asset-dns-filter" class="select-control">
+                <option value="">All DNS statuses</option>
+                <option value="NOERROR">NOERROR (Active)</option>
+                <option value="NXDOMAIN">NXDOMAIN</option>
+                <option value="DANGLING_CNAME">DANGLING_CNAME</option>
+              </select>
+
+              <button type="button" id="asset-apply-btn" class="btn btn-secondary">Apply</button>
+              <button type="button" id="asset-clear-btn" class="btn btn-ghost">Clear</button>
+            </div>
+
+            <div class="toolbar-group">
+              <span id="selected-rows-badge" class="mono" style="display:none; color:var(--text-secondary);">0 selected</span>
+
+              <div class="dropdown-wrapper">
+                <button type="button" id="col-vis-btn" class="btn btn-secondary">Columns</button>
+                <div id="col-vis-menu" class="dropdown-menu">
+                  <div style="font-size:var(--text-xs);color:var(--text-muted);margin-bottom:0.3rem;">Visible columns</div>
+                  <label style="display:flex;gap:0.45rem;font-size:var(--text-sm);padding:0.15rem 0;"><input type="checkbox" data-col-toggle="col-type" checked /> Asset Type</label>
+                  <label style="display:flex;gap:0.45rem;font-size:var(--text-sm);padding:0.15rem 0;"><input type="checkbox" data-col-toggle="col-domain" checked /> Root Domain</label>
+                  <label style="display:flex;gap:0.45rem;font-size:var(--text-sm);padding:0.15rem 0;"><input type="checkbox" data-col-toggle="col-ip" checked /> IP Address</label>
+                  <label style="display:flex;gap:0.45rem;font-size:var(--text-sm);padding:0.15rem 0;"><input type="checkbox" data-col-toggle="col-dns" checked /> DNS Status</label>
+                  <label style="display:flex;gap:0.45rem;font-size:var(--text-sm);padding:0.15rem 0;"><input type="checkbox" data-col-toggle="col-services" checked /> Exposed Services</label>
+                  <label style="display:flex;gap:0.45rem;font-size:var(--text-sm);padding:0.15rem 0;"><input type="checkbox" data-col-toggle="col-vulns" checked /> Vulnerabilities</label>
+                  <label style="display:flex;gap:0.45rem;font-size:var(--text-sm);padding:0.15rem 0;"><input type="checkbox" data-col-toggle="col-observed" checked /> Last Observed</label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Enterprise Data Table -->
+          <div class="table-responsive">
+            <table class="data-table" id="assets-table">
+              <thead>
+                <tr>
+                  <th style="width:34px;"><input type="checkbox" id="select-all-assets" /></th>
+                  <th class="sortable" data-sort="subdomain">Asset ↕</th>
+                  <th class="col-type">Type</th>
+                  <th class="col-domain sortable" data-sort="domain">Domain ↕</th>
+                  <th class="col-ip sortable" data-sort="ipAddress">IP address ↕</th>
+                  <th class="col-dns sortable" data-sort="dnsStatus">DNS ↕</th>
+                  <th class="col-services sortable" data-sort="portsCount">Ports ↕</th>
+                  <th class="col-vulns sortable" data-sort="cvesCount">CVEs ↕</th>
+                  <th class="sortable" data-sort="riskRank">Risk ↕</th>
+                  <th class="col-observed sortable" data-sort="lastObserved">Last seen ↕</th>
+                </tr>
+              </thead>
+              <tbody id="assets-tbody"></tbody>
+            </table>
+          </div>
+
+          <!-- Pagination Footer -->
+          <div class="table-footer">
+            <div id="assets-pagination-info">0 assets</div>
+            <div style="display:flex; align-items:center; gap:0.5rem;">
+              <label for="assets-page-size" style="font-size:0.74rem;">Rows:</label>
+              <select id="assets-page-size" class="select-control" style="padding:0.22rem 0.45rem;">
+                <option value="10">10</option>
+                <option value="25" selected>25</option>
+                <option value="50">50</option>
+              </select>
+              <button type="button" id="assets-prev-btn" class="btn btn-secondary btn-sm">Previous</button>
+              <span id="assets-page-indicator" class="mono">Page 1 / 1</span>
+              <button type="button" id="assets-next-btn" class="btn btn-secondary btn-sm">Next</button>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Slide-Over Asset Detail Drawer with 6 Tabs -->
+  <div class="drawer-backdrop" id="asset-drawer">
+    <div class="drawer-panel">
+      <div class="drawer-header">
+        <div>
+          <div style="font-size:var(--text-xs);color:var(--text-muted);">Asset</div>
+          <h3 id="drawer-asset-name" class="mono" style="font-size:var(--text-lg);font-weight:600;">—</h3>
+        </div>
+        <button type="button" id="drawer-close-btn" class="btn btn-secondary btn-sm">Close</button>
+      </div>
+
+      <div class="drawer-tabs" role="tablist">
+        <button type="button" class="drawer-tab active" data-drawer-tab="overview">Overview</button>
+        <button type="button" class="drawer-tab" data-drawer-tab="dns">DNS</button>
+        <button type="button" class="drawer-tab" data-drawer-tab="certificates">Certificates</button>
+        <button type="button" class="drawer-tab" data-drawer-tab="exposures">Exposures</button>
+        <button type="button" class="drawer-tab" data-drawer-tab="vulnerabilities">Vulnerabilities</button>
+        <button type="button" class="drawer-tab" data-drawer-tab="history">History</button>
+      </div>
+
+      <div class="drawer-body" id="drawer-tab-content"></div>
+    </div>
+  </div>
+
+  <script src="/js/icons.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/shell.js"></script>
+  <script src="/js/assets.js"></script>
+</body>
+</html>
+>

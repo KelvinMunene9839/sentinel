@@ -1,0 +1,85 @@
+:root {
+  /* Neutral graphite surfaces — low chroma, no blue cast */
+  --bg-canvas: #14161a;
+  --bg-surface-1: #1a1d22;
+  --bg-surface-2: #20242a;
+  --bg-surface-3: #282d34;
+  --bg-elevated: #2b3037;
+  --bg-glass: #1a1d22;
+
+  /* Borders: hairlines do the work shadows used to do */
+  --border-subtle: #2a2e35;
+  --border-default: #353a43;
+  --border-strong: #4a515d;
+
+  /* Text */
+  --text-primary: #e6e8eb;
+  --text-secondary: #a3a9b3;
+  --text-muted: #757c88;
+  --text-inverse: #ffffff;
+
+  /* One restrained accent, used for primary actions, links and active state only */
+  --accent-primary: #3d7fd1;
+  --accent-primary-hover: #5090e0;
+  --accent-text: #7fb0ec;
+  --accent-primary-subtle: rgba(61, 127, 209, 0.14);
+  --accent-cyan: var(--accent-primary);
+  --accent-indigo: var(--text-muted);
+
+  /* Severity: reserved for risk data and errors */
+  --sev-critical: #e5484d;
+  --sev-critical-bg: rgba(229, 72, 77, 0.12);
+  --sev-critical-border: rgba(229, 72, 77, 0.45);
+  --sev-critical-text: #f2797d;
+
+  --sev-high: #e5832f;
+  --sev-high-bg: rgba(229, 131, 47, 0.12);
+  --sev-high-border: rgba(229, 131, 47, 0.45);
+  --sev-high-text: #eda064;
+
+  --sev-medium: #d1a630;
+  --sev-medium-bg: rgba(209, 166, 48, 0.12);
+  --sev-medium-border: rgba(209, 166, 48, 0.45);
+  --sev-medium-text: #dcbb58;
+
+  --sev-low: #6b95c9;
+  --sev-low-bg: rgba(107, 149, 201, 0.12);
+  --sev-low-border: rgba(107, 149, 201, 0.4);
+  --sev-low-text: #8fb0d9;
+
+  --sev-info: #7b828e;
+  --sev-info-bg: rgba(123, 130, 142, 0.12);
+  --sev-info-border: rgba(123, 130, 142, 0.35);
+
+  --status-emerald: #3fa273;
+  --status-emerald-bg: rgba(63, 162, 115, 0.12);
+  --status-emerald-border: rgba(63, 162, 115, 0.4);
+  --status-ok-text: #5cbf91;
+
+  /* Typography */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: ui-monospace, 'JetBrains Mono', 'Cascadia Mono', Consolas, monospace;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.8125rem;
+  --text-base: 0.875rem;
+  --text-md: 0.9375rem;
+  --text-lg: 1rem;
+  --text-xl: 1.125rem;
+  --text-2xl: 1.25rem;
+
+  /* Dimensions */
+  --sidebar-width: 220px;
+  --sidebar-collapsed-width: 52px;
+  --topbar-height: 44px;
+
+  --radius-sm: 2px;
+  --radius-md: 3px;
+  --radius-lg: 4px;
+
+  /* Elevation only for things that float over content */
+  --shadow-sm: none;
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.45);
+  --focus-ring: 0 0 0 2px rgba(61, 127, 209, 0.45);
+}

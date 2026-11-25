@@ -1,0 +1,52 @@
+@import url('/css/tokens.css');
+@import url('/css/pages.css');
+@import url('/css/layout.css');
+@import url('/css/components.css');
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  background-color: var(--bg-canvas);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+a {
+  color: var(--accent-text);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Buttons that are links keep their own colour and never underline */
+a.btn:hover, a.nav-item:hover, a.brand-lockup:hover {
+  text-decoration: none;
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+}
+
+/* Counts, ports, TTLs and timestamps align in columns */
+.num, .mono {
+  font-variant-numeric: tabular-nums;
+}
+
+.num { text-align: right; }
+
+::selection { background: rgba(61, 127, 209, 0.4); }
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb { background: var(--border-default); border: 2px solid var(--bg-canvas); border-radius: 5px; }
+::-webkit-scrollbar-track { background: transparent; }

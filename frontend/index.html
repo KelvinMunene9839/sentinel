@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SENTINEL · Attack surface intelligence</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <div class="auth-page" style="grid-template-columns: minmax(0, 1fr);">
+    <aside class="auth-aside" style="border-right:0;">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div class="brand-lockup">
+          <div class="brand-mark" id="landing-brand-icon"></div>
+          <div class="brand-text">
+            <span class="brand-name">SENTINEL</span>
+            <span class="brand-subtitle">Attack surface intelligence</span>
+          </div>
+        </div>
+        <span id="health-badge" class="badge badge-info mono">Checking…</span>
+      </div>
+
+      <div>
+        <h1>Passive reconnaissance and external exposure monitoring.</h1>
+        <p>SENTINEL correlates Certificate Transparency logs, DNS resolution, public port exposure and CVE data in a deterministic risk engine. It only reads public sources, and only for domains in your authorized scope.</p>
+        <div class="source-list">
+          <div><span>Subdomain discovery</span><span class="mono">crt.sh</span></div>
+          <div><span>DNS resolution</span><span class="mono">Cloudflare DoH</span></div>
+          <div><span>IP exposure</span><span class="mono">Shodan InternetDB</span></div>
+          <div><span>CVE enrichment</span><span class="mono">NIST NVD 2.0</span></div>
+        </div>
+        <div style="display:flex; gap:0.5rem; margin-top:1.5rem;">
+          <a href="/dashboard.html" class="btn btn-primary">Open overview</a>
+          <a href="/scans.html" class="btn btn-secondary">Run a scan</a>
+          <a href="/login.html" class="btn btn-ghost">Sign in</a>
+        </div>
+      </div>
+      <span></span>
+    </aside>
+  </div>
+
+  <script src="/js/icons.js"></script>
+  <script src="/js/api.js"></script>
+  <script>
+    if (window.SentinelIcons) {
+      document.getElementById('landing-brand-icon').innerHTML = window.SentinelIcons.getIcon('shield');
+    }
+    (async () => {
+      const badge = document.getElementById('health-badge');
+      try {
+        const health = await window.SentinelAPI.getHealth();
+        badge.textContent = `Online · ${health.serverId.toUpperCase()} · v${health.version}`;
+        badge.className = 'badge badge-ok';
+      } catch (_) {
+        badge.textContent = 'Offline';
+        badge.className = 'badge badge-critical';
+      }
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Overview · SENTINEL</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="app-sidebar"></aside>
+
+    <div class="app-main">
+      <header class="app-topbar"></header>
+
+      <main class="page-container">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Overview</h1>
+          </div>
+          <div class="page-actions">
+            <span class="page-meta" id="dash-last-updated">Updated —</span>
+            <button type="button" id="dash-refresh-btn" class="btn btn-secondary">
+              <span id="icon-refresh-holder"></span>
+              <span>Refresh</span>
+            </button>
+            <a href="/scans.html" class="btn btn-primary">New scan</a>
+          </div>
+        </div>
+
+        <section class="stat-strip" aria-label="Summary">
+          <div class="stat">
+            <span class="stat-label">Assets</span>
+            <span class="stat-value" id="kpi-total-assets">0</span>
+            <span class="stat-meta" id="kpi-active-ratio">0 resolving</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Subdomains</span>
+            <span class="stat-value" id="kpi-subdomains">0</span>
+            <span class="stat-meta">From CT logs</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Public IPs</span>
+            <span class="stat-value" id="kpi-public-ips">0</span>
+            <span class="stat-meta">IPv4 and IPv6</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Open ports</span>
+            <span class="stat-value" id="kpi-exposed-services">0</span>
+            <span class="stat-meta">InternetDB</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">CVE associations</span>
+            <span class="stat-value" id="kpi-vulns">0</span>
+            <span class="stat-meta">NVD</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Takeover indicators</span>
+            <span class="stat-value" id="kpi-takeovers">0</span>
+            <span class="stat-meta">Dangling CNAMEs</span>
+          </div>
+        </section>
+
+        <div id="dash-empty-state" class="notice" style="display:none; margin-bottom:1rem; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap;">
+          <span><strong>No scan data yet.</strong> Run a scan against an authorized domain (for example <span class="mono">iana.org</span>) to populate this page. Nothing is shown until real results exist.</span>
+          <a href="/scans.html" class="btn btn-primary btn-sm">Start a scan</a>
+        </div>
+
+        <section class="analytics-grid-12">
+          <div class="panel col-span-8">
+            <div class="panel-header">
+              <div>
+                <span class="panel-title">Priority findings</span>
+                <span class="panel-subtitle">Recommended action shown per finding</span>
+              </div>
+              <a href="/findings.html" class="btn btn-ghost btn-sm">All findings</a>
+            </div>
+            <div class="panel-body-flush">
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Severity</th>
+                      <th>Finding</th>
+                      <th>Asset</th>
+                      <th>Recommended action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="dash-findings-tbody"></tbody>
+                </table>
+              </div>
+            </div>
+            <div id="dash-recommendations-list" hidden></div>
+          </div>
+
+          <div class="panel col-span-4">
+            <div class="panel-header">
+              <div><span class="panel-title">Risk distribution</span></div>
+              <a href="/vulnerabilities.html" class="btn btn-ghost btn-sm">CVEs</a>
+            </div>
+            <div class="panel-body" id="chart-risk-distribution"></div>
+
+            <div class="panel-header" style="border-top:1px solid var(--border-subtle);">
+              <div><span class="panel-title">Open ports</span><span class="panel-subtitle">IPs per port</span></div>
+              <a href="/findings.html?tab=exposures" class="btn btn-ghost btn-sm">All IPs</a>
+            </div>
+            <div class="panel-body" id="chart-exposure-ports"></div>
+
+            <div class="panel-header" style="border-top:1px solid var(--border-subtle);">
+              <div><span class="panel-title">Surface composition</span></div>
+              <a href="/dns.html" class="btn btn-ghost btn-sm">DNS</a>
+            </div>
+            <div class="panel-body" id="chart-surface-composition"></div>
+          </div>
+        </section>
+
+        <section class="analytics-grid-12">
+          <div class="panel col-span-8">
+            <div class="panel-header">
+              <div><span class="panel-title">Recently discovered assets</span></div>
+              <a href="/assets.html" class="btn btn-ghost btn-sm">Full inventory</a>
+            </div>
+            <div class="panel-body-flush">
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Asset</th>
+                      <th>IP address</th>
+                      <th>Hosting</th>
+                      <th>DNS</th>
+                      <th>Ports</th>
+                      <th>Risk</th>
+                    </tr>
+                  </thead>
+                  <tbody id="dash-recent-assets-tbody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel col-span-4">
+            <div class="panel-header">
+              <div><span class="panel-title">Recent scans</span></div>
+              <a href="/scans.html" class="btn btn-ghost btn-sm">History</a>
+            </div>
+            <div class="panel-body-flush">
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Domain</th>
+                      <th>Status</th>
+                      <th class="num">Assets</th>
+                      <th class="num">Findings</th>
+                    </tr>
+                  </thead>
+                  <tbody id="dash-recent-scans-tbody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="analytics-grid-12">
+          <div class="panel col-span-7">
+            <div class="panel-header">
+              <div>
+                <span class="panel-title">Assets per scan</span>
+                <span class="panel-subtitle" id="trend-scans-count">0 scans</span>
+              </div>
+            </div>
+            <div class="panel-body" id="chart-asset-trend"></div>
+          </div>
+
+          <div class="panel col-span-5">
+            <div class="panel-header">
+              <div><span class="panel-title">Data providers</span></div>
+            </div>
+            <div class="panel-body-flush">
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Provider</th>
+                      <th>Status</th>
+                      <th class="num">Calls</th>
+                      <th class="num">Cache hits</th>
+                    </tr>
+                  </thead>
+                  <tbody id="dash-providers-tbody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="/js/icons.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/shell.js"></script>
+  <script src="/js/charts.js"></script>
+  <script src="/js/dashboard.js"></script>
+</body>
+</html>

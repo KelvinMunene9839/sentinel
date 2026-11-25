@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DNS · SENTINEL</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="app-sidebar"></aside>
+
+    <div class="app-main">
+      <header class="app-topbar"></header>
+
+      <main class="page-container">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">DNS</h1>
+            <p class="page-subtitle">Records resolved through Cloudflare DNS-over-HTTPS.</p>
+          </div>
+          <div class="page-actions">
+            <a href="/api/v1/reports/export?reportType=dns_csv" class="btn btn-secondary">Export CSV</a>
+          </div>
+        </div>
+
+        <div class="stat-strip" style="grid-template-columns: repeat(8, minmax(0, 1fr));" id="dns-type-counters" aria-label="Filter by record type">
+          <div class="metric-card" style="cursor:pointer;" data-type-pill="A"><div class="metric-label">A</div><div class="metric-value" id="cnt-A">0</div></div>
+          <div class="metric-card" style="cursor:pointer;" data-type-pill="AAAA"><div class="metric-label">AAAA</div><div class="metric-value" id="cnt-AAAA">0</div></div>
+          <div class="metric-card" style="cursor:pointer;" data-type-pill="CNAME"><div class="metric-label">CNAME</div><div class="metric-value" id="cnt-CNAME">0</div></div>
+          <div class="metric-card" style="cursor:pointer;" data-type-pill="MX"><div class="metric-label">MX</div><div class="metric-value" id="cnt-MX">0</div></div>
+          <div class="metric-card" style="cursor:pointer;" data-type-pill="TXT"><div class="metric-label">TXT</div><div class="metric-value" id="cnt-TXT">0</div></div>
+          <div class="metric-card" style="cursor:pointer;" data-type-pill="NS"><div class="metric-label">NS</div><div class="metric-value" id="cnt-NS">0</div></div>
+          <div class="metric-card" style="cursor:pointer;" data-type-pill="CAA"><div class="metric-label">CAA</div><div class="metric-value" id="cnt-CAA">0</div></div>
+          <div class="metric-card" style="cursor:pointer;" data-type-pill="SOA"><div class="metric-label">SOA</div><div class="metric-value" id="cnt-SOA">0</div></div>
+        </div>
+
+        <section class="analytics-grid-12" style="align-items:start;">
+          <div class="panel col-span-8">
+            <div class="toolbar">
+              <div class="toolbar-group" style="flex:1;">
+                <input type="text" id="dns-hostname" class="input-control" placeholder="Search hostname or value" style="min-width:240px; flex:1; max-width:360px;" />
+                <select id="dns-type" class="select-control">
+                  <option value="">All record types</option>
+                  <option value="A">A</option>
+                  <option value="AAAA">AAAA</option>
+                  <option value="CNAME">CNAME</option>
+                  <option value="MX">MX</option>
+                  <option value="TXT">TXT</option>
+                  <option value="NS">NS</option>
+                  <option value="CAA">CAA</option>
+                  <option value="SOA">SOA</option>
+                </select>
+                <button type="button" id="dns-filter-btn" class="btn btn-secondary">Filter</button>
+                <button type="button" id="dns-reset-btn" class="btn btn-ghost">Reset</button>
+              </div>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Hostname</th>
+                    <th>Value</th>
+                    <th class="num">TTL</th>
+                    <th>Status</th>
+                    <th>Provider</th>
+                    <th>Last observed</th>
+                  </tr>
+                </thead>
+                <tbody id="dns-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="panel col-span-4">
+            <div class="panel-header">
+              <div><span class="panel-title">Host records</span></div>
+              <select id="dns-host-selector" class="select-control" style="max-width:200px;">
+                <option value="">Select hostname</option>
+              </select>
+            </div>
+            <div class="panel-body" id="dns-relationship-map"></div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="/js/icons.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/shell.js"></script>
+  <script src="/js/dns.js"></script>
+</body>
+</html>

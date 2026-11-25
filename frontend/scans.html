@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scans · SENTINEL</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="app-sidebar"></aside>
+
+    <div class="app-main">
+      <header class="app-topbar"></header>
+
+      <main class="page-container">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title" id="scans-page-title">Scans</h1>
+            <p class="page-subtitle">Passive discovery across crt.sh, Cloudflare DoH, Shodan InternetDB and NIST NVD.</p>
+          </div>
+          <div class="page-actions">
+            <a href="/reports.html" class="btn btn-secondary">Reports</a>
+          </div>
+        </div>
+
+        <section class="analytics-grid-12" id="scan-launcher-section">
+          <div class="panel col-span-8">
+            <div class="panel-header">
+              <div>
+                <span class="panel-title">New scan</span>
+                <span class="panel-subtitle">Passive only. Target must be in authorized scope.</span>
+              </div>
+            </div>
+            <div class="panel-body">
+              <form id="scan-form" style="display:flex; flex-direction:column; gap:0.75rem;">
+                <div style="display:grid; grid-template-columns: 2fr 1fr 1fr; gap:0.75rem;">
+                  <div>
+                    <label for="target-domain" class="field-label">Target domain</label>
+                    <input type="text" id="target-domain" class="input-control" placeholder="e.g. iana.org" required value="iana.org" style="width:100%;" />
+                  </div>
+                  <div>
+                    <label for="max-subdomains" class="field-label">Max subdomains</label>
+                    <input type="number" id="max-subdomains" class="input-control" value="8" min="1" max="30" style="width:100%;" />
+                  </div>
+                  <div>
+                    <label for="max-cves" class="field-label">Max CVEs</label>
+                    <input type="number" id="max-cves" class="input-control" value="6" min="1" max="20" style="width:100%;" />
+                  </div>
+                </div>
+
+                <label style="display:flex; align-items:flex-start; gap:0.5rem; font-size:var(--text-sm); color:var(--text-secondary); cursor:pointer;">
+                  <input type="checkbox" id="auth-confirm" required style="margin-top:0.2rem;" />
+                  <span>I confirm this domain is within authorized scope for passive external reconnaissance.</span>
+                </label>
+
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.75rem;">
+                  <span style="font-size:var(--text-xs); color:var(--text-muted);">Requires an Administrator or Analyst session. <a href="/login.html">Sign in</a></span>
+                  <button type="submit" id="start-scan-btn" class="btn btn-primary">Start scan</button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <div class="panel col-span-4">
+            <div class="panel-header">
+              <div>
+                <span class="panel-title">Authorized scope</span>
+                <span class="panel-subtitle">Click to select</span>
+              </div>
+            </div>
+            <div class="panel-body" style="display:flex; flex-direction:column; justify-content:space-between; gap:0.75rem;">
+              <div id="authorized-domains-badges" style="display:flex; flex-wrap:wrap; gap:0.35rem;"></div>
+              <form id="add-scope-form" style="display:flex; gap:0.4rem;">
+                <input type="text" id="new-scope-domain" class="input-control" placeholder="Add domain" style="flex:1;" required />
+                <button type="submit" class="btn btn-secondary">Add</button>
+              </form>
+            </div>
+          </div>
+        </section>
+
+        <!-- Active / Selected Scan Live Progress & 8 Canonical Stages -->
+        <section class="panel" id="scan-progress-card" style="display:none; margin-bottom:1rem;">
+          <div class="panel-header">
+            <div>
+              <span class="panel-title" id="progress-title">Scan progress</span>
+              <span class="panel-subtitle" id="progress-subtitle">Live stage status</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:0.6rem;">
+              <span id="progress-assets-pill" class="mono" style="color:var(--text-secondary);">0 assets</span>
+              <span id="progress-findings-pill" class="mono" style="color:var(--text-secondary);">0 findings</span>
+              <span id="progress-status-badge" class="badge badge-running">Running</span>
+              <button type="button" id="cancel-scan-btn" class="btn btn-danger btn-sm" style="display:none;">Cancel scan</button>
+            </div>
+          </div>
+
+          <div class="panel-body">
+            <div id="partial-failure-alert" class="notice notice-warn" style="display:none; margin-bottom:0.75rem;"></div>
+
+            <!-- 8 Canonical Workflow Milestones -->
+            <div class="pipeline-stepper" id="canonical-stages-grid"></div>
+          </div>
+        </section>
+
+        <!-- Historical Scans & Attack-Surface Drift Comparison -->
+        <section class="panel" style="margin-bottom:1rem;">
+          <div class="panel-header">
+            <div>
+              <span class="panel-title">Scan history</span>
+              <span class="panel-subtitle">Select two scans to compare</span>
+            </div>
+            <div style="display:flex; gap:0.4rem; align-items:center; flex-shrink:0;">
+              <select id="compare-scan-a" class="select-control" style="max-width:170px;"><option value="">Base scan</option></select>
+              <select id="compare-scan-b" class="select-control" style="max-width:170px;"><option value="">Compared scan</option></select>
+              <button type="button" id="compare-btn" class="btn btn-secondary btn-sm">Compare</button>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Scan</th>
+                  <th>Domain</th>
+                  <th>Status</th>
+                  <th class="num">Assets</th>
+                  <th class="num">Public IPs</th>
+                  <th class="num">Ports</th>
+                  <th class="num">Findings</th>
+                  <th>Providers</th>
+                  <th>Started</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="scans-history-tbody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Drift Comparison Result Panel -->
+        <section class="panel" id="comparison-result-card" style="display:none;">
+          <div class="panel-header">
+            <div>
+              <span class="panel-title">Changes between scans</span>
+              <span class="panel-subtitle" id="comparison-subtitle"></span>
+            </div>
+          </div>
+          <div class="panel-body" id="comparison-content"></div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="/js/icons.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/shell.js"></script>
+  <script src="/js/scans.js"></script>
+</body>
+</html>

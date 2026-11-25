@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reports · SENTINEL</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="app-sidebar"></aside>
+
+    <div class="app-main">
+      <header class="app-topbar"></header>
+
+      <main class="page-container">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Reports</h1>
+            <p class="page-subtitle">CSV and JSON exports with evidence attribution and provider limitations.</p>
+          </div>
+          <div class="page-actions">
+            <a href="/api/v1/reports/export?reportType=assets_csv" class="btn btn-secondary">Latest assets CSV</a>
+            <a href="/api/v1/reports/export?reportType=consolidated_json" class="btn btn-primary">Latest consolidated JSON</a>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="toolbar">
+            <div class="toolbar-group" style="flex:1;">
+              <input type="text" id="report-search" class="input-control" placeholder="Filter by domain or scan ID" style="min-width:250px; flex:1; max-width:360px;" />
+              <select id="report-status-filter" class="select-control">
+                <option value="">All statuses</option>
+                <option value="completed">Completed</option>
+                <option value="completed_with_warnings">Completed with warnings</option>
+              </select>
+            </div>
+            <div style="font-size:var(--text-xs); color:var(--text-muted);">
+              File name: <span class="mono">SENTINEL_{domain}_{ReportType}_{YYYY-MM-DD}.{ext}</span>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Scan</th>
+                  <th>Domain</th>
+                  <th>Status</th>
+                  <th>Completed</th>
+                  <th class="num">Assets</th>
+                  <th class="num">Findings</th>
+                  <th>Provider warnings</th>
+                  <th>Downloads</th>
+                </tr>
+              </thead>
+              <tbody id="reports-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="/js/icons.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/shell.js"></script>
+  <script src="/js/reports.js"></script>
+</body>
+</html>

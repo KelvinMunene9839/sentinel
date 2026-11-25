@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Findings · SENTINEL</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="app-sidebar"></aside>
+
+    <div class="app-main">
+      <header class="app-topbar"></header>
+
+      <main class="page-container">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title" id="findings-page-title">Findings and exposure</h1>
+            <p class="page-subtitle">Takeover risk, public IP exposure and evidence-based findings.</p>
+          </div>
+        </div>
+
+        <div class="tab-bar" role="tablist">
+          <button type="button" class="tab" data-view-switch="all">All</button>
+          <button type="button" class="tab" data-view-switch="findings">Findings</button>
+          <button type="button" class="tab" data-view-switch="exposures">IP exposure</button>
+          <button type="button" class="tab" data-view-switch="takeover">Takeover risk</button>
+        </div>
+
+        <!-- Section 1: Passive Subdomain Takeover Risk Analysis -->
+        <section id="section-takeover" class="panel" style="margin-bottom:1rem;">
+          <div class="panel-header">
+            <div>
+              <span class="panel-title">Subdomain takeover</span>
+              <span class="panel-subtitle">CNAME targets checked passively against known cloud service patterns</span>
+            </div>
+            <div style="display:flex; gap:0.75rem; flex-wrap:wrap; font-size:var(--text-xs);" aria-label="Confidence scale">
+              <span class="badge badge-info">Informational</span>
+              <span class="badge badge-low">Suspicious</span>
+              <span class="badge badge-medium">Potentially vulnerable</span>
+              <span class="badge badge-high">Verified</span>
+              <span class="badge badge-critical">Confirmed</span>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Hostname</th>
+                  <th>CNAME target</th>
+                  <th>Service pattern</th>
+                  <th>Confidence</th>
+                  <th>Status</th>
+                  <th>Evidence</th>
+                  <th>Remediation</th>
+                </tr>
+              </thead>
+              <tbody id="takeover-tbody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Section 2: Shodan InternetDB Public IP Exposure Intelligence -->
+        <section id="section-exposures" class="panel" style="margin-bottom:1rem;">
+          <div class="panel-header">
+            <div>
+              <span class="panel-title">Public IP exposure</span>
+              <span class="panel-subtitle">Shodan InternetDB · non-commercial use only</span>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>IP address</th>
+                  <th>Hostnames</th>
+                  <th>Open ports</th>
+                  <th>Sensitive services</th>
+                  <th>CPE</th>
+                  <th>Tags</th>
+                  <th>CVEs</th>
+                  <th>Last enriched</th>
+                </tr>
+              </thead>
+              <tbody id="exposures-tbody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Section 3: Deterministic Risk Findings -->
+        <section id="section-findings" class="panel">
+          <div class="panel-header">
+            <div>
+              <span class="panel-title">Security findings</span>
+              <span class="panel-subtitle">Each finding lists its reason, evidence, source and remediation</span>
+            </div>
+          </div>
+
+          <div class="toolbar">
+            <div class="toolbar-group" style="flex:1;">
+              <input type="text" id="finding-search" class="input-control" placeholder="Search title, asset or evidence" style="min-width:240px; flex:1; max-width:360px;" />
+
+              <select id="finding-severity" class="select-control">
+                <option value="">All severities</option>
+                <option value="Critical">Critical</option>
+                <option value="High">High</option>
+                <option value="Medium">Medium</option>
+                <option value="Low">Low</option>
+                <option value="Informational">Informational</option>
+              </select>
+
+              <select id="finding-type" class="select-control">
+                <option value="">All categories</option>
+                <option value="SUBDOMAIN_TAKEOVER_INDICATOR">Subdomain takeover</option>
+                <option value="SENSITIVE_PORT_EXPOSURE">Sensitive port exposure</option>
+                <option value="CVE_ASSOCIATION_OBSERVED">CVE association</option>
+                <option value="DNS_CONFIGURATION">DNS configuration</option>
+              </select>
+
+              <button type="button" id="finding-filter-btn" class="btn btn-primary">Filter</button>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Severity</th>
+                  <th>Category</th>
+                  <th>Finding</th>
+                  <th>Asset</th>
+                  <th>Confidence</th>
+                  <th>Reason and evidence</th>
+                  <th>Remediation</th>
+                  <th>Source</th>
+                </tr>
+              </thead>
+              <tbody id="findings-tbody"></tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="/js/icons.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/shell.js"></script>
+  <script src="/js/findings.js"></script>
+</body>
+</html>

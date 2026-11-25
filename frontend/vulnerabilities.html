@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vulnerabilities · SENTINEL | NIST NVD v2.0</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="app-sidebar"></aside>
+
+    <div class="app-main">
+      <header class="app-topbar"></header>
+
+      <main class="page-container">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Vulnerabilities</h1>
+            <p class="page-subtitle">NIST NVD 2.0 CVEs correlated with Shodan InternetDB CPE and IP observations.</p>
+          </div>
+          <div class="page-actions">
+            <a href="/api/v1/reports/export?reportType=vulnerabilities_csv" class="btn btn-secondary">Export CSV</a>
+          </div>
+        </div>
+
+        <section class="stat-strip">
+          <div class="stat">
+            <span class="stat-label">Unique CVEs</span>
+            <span class="stat-value" id="vuln-count-total">0</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Critical (CVSS 9.0+)</span>
+            <span class="stat-value" id="vuln-count-critical" style="color:var(--sev-critical-text);">0</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">High (7.0 to 8.9)</span>
+            <span class="stat-value" id="vuln-count-high" style="color:var(--sev-high-text);">0</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Medium (4.0 to 6.9)</span>
+            <span class="stat-value" id="vuln-count-medium">0</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Low or unscored</span>
+            <span class="stat-value" id="vuln-count-low">0</span>
+          </div>
+        </section>
+
+        <div class="notice" style="margin-bottom:1rem;">
+          <strong>Observed is not verified.</strong> An <span class="badge badge-medium">Observed CVE association</span> comes from passive IP and CPE correlation. It does not confirm a <span class="badge badge-critical">Verified vulnerable build</span>. Confirm the exact patch level on the host before treating it as exploitable.
+        </div>
+
+        <div class="panel">
+          <div class="toolbar">
+            <div class="toolbar-group" style="flex:1;">
+              <input type="text" id="cve-search" class="input-control" placeholder="Search CVE ID, description, asset or CPE" style="min-width:260px; flex:1; max-width:420px;" />
+
+              <select id="cve-severity" class="select-control">
+                <option value="">All severities</option>
+                <option value="CRITICAL">Critical</option>
+                <option value="HIGH">High</option>
+                <option value="MEDIUM">Medium</option>
+                <option value="LOW">Low</option>
+              </select>
+
+              <select id="cve-sort" class="select-control">
+                <option value="cvss_desc">Sort: CVSS high to low</option>
+                <option value="cvss_asc">Sort: CVSS low to high</option>
+              </select>
+
+              <button type="button" id="cve-filter-btn" class="btn btn-secondary">Filter</button>
+              <button type="button" id="cve-clear-btn" class="btn btn-ghost">Reset</button>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>CVE</th>
+                  <th class="num">CVSS</th>
+                  <th>Severity</th>
+                  <th>Affected assets</th>
+                  <th>CPE</th>
+                  <th>Evidence</th>
+                  <th>Published</th>
+                  <th>Updated</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="cves-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Slide-Over CVE Detail Drawer -->
+  <div class="drawer-backdrop" id="cve-drawer">
+    <div class="drawer-panel">
+      <div class="drawer-header">
+        <div>
+          <div style="font-size:var(--text-xs);color:var(--text-muted);">NIST NVD record</div>
+          <h3 id="drawer-cve-id" class="mono" style="font-size:var(--text-lg);font-weight:600;">—</h3>
+        </div>
+        <button type="button" id="cve-drawer-close" class="btn btn-secondary btn-sm">Close</button>
+      </div>
+      <div class="drawer-body" id="drawer-cve-body"></div>
+    </div>
+  </div>
+
+  <script src="/js/icons.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/shell.js"></script>
+  <script src="/js/vulnerabilities.js"></script>
+</body>
+</html>
